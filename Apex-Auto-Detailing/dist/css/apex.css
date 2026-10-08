@@ -1,0 +1,67 @@
+/* Apex brand adaptations; reference geometry remains in custom.css. */
+#apex-contact-dialog{border:1px solid #6cc9f4;border-radius:16px;padding:44px;max-width:min(90vw,480px);color:#2f3d86;font-family:"Funnel Sans",sans-serif}#apex-contact-dialog::backdrop{background:#101c4ac9}#apex-contact-dialog h2{font-family:"Bebas Neue",sans-serif;font-size:40px}.apex-close{position:absolute;right:16px;top:8px;background:none;border:0;font-size:28px}.apex-dismiss{border:0;background:#2f3d86;color:white;padding:12px 24px;border-radius:8px}.rc-stars{font-size:12px;letter-spacing:2px}.rgw-num{font-size:40px} @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+
+/* Services: visible by default, clear touch layout, no hidden cursor. */
+.services-list{list-style:none;padding:0;margin:0}
+.service-row{opacity:1;transform:none;cursor:auto;min-width:0}
+.service-row-body{min-width:0}
+.service-row-title{line-height:1.1;overflow-wrap:break-word}
+.service-row-desc{font-size:1rem;line-height:1.6}
+.service-row-quote{min-height:44px;font-size:.875rem}
+.service-row-tag{opacity:1;transform:none;font-size:.75rem;letter-spacing:.08em}
+.service-row-num{opacity:.45}
+.apex-service-photo{display:none}
+.service-row:focus-within{border-left-color:var(--clr-primary)}
+/* Process: readable document flow is the base; pinning is opt-in. */
+.process-section{height:auto;overflow:visible;background:#101a43}
+.process-pin-wrapper{height:auto;padding:80px max(24px,calc((100% - 1200px)/2)) 64px}
+.process-stack{overflow:visible;min-height:0;flex:none;display:grid;gap:40px}
+.process-card{position:relative;inset:auto;opacity:1;visibility:visible;transform:none;will-change:auto;grid-template-columns:140px minmax(0,1fr);gap:36px;padding:24px 0 40px;border-bottom:1px solid #ffffff26}
+.process-card:last-child{border-bottom:0;padding-bottom:0}
+.process-card-left{min-height:120px;height:auto}
+.process-big-num{position:relative;font-size:7rem;opacity:.35}
+.process-card-right{overflow:visible;min-width:0}
+.process-card-title{font-size:clamp(2.5rem,5vw,4.8rem);line-height:1.05;overflow-wrap:break-word}
+.process-card-desc{font-size:1rem;color:#ffffffd9;max-width:640px}
+.process-card-points{list-style:none;padding:0;display:flex}
+.process-card-points li{font-size:.9375rem;color:#ffffffbf}
+.process-main-sub{display:block;font-size:1rem;color:#ffffffbf}
+.process-final-cta{opacity:1;transform:none}
+.process-video-bg{overflow:hidden}
+.process-section:not(.process-animated) .process-step-counter,
+.process-section:not(.process-animated) .process-progress-bar{display:none}
+.process-animated{height:100svh;overflow:hidden}
+.process-animated .process-pin-wrapper{height:100svh;padding-top:calc(var(--header-h) + 24px);padding-bottom:28px}
+.process-animated .process-stack{position:relative;flex:1;display:block;overflow:hidden}
+.process-animated .process-card{position:absolute;inset:0;border:0;padding:8px 0;grid-template-columns:200px minmax(0,1fr)}
+.process-animated .process-card-left{height:100%}
+.process-animated .process-big-num{font-size:10rem}
+@media(max-width:992px){
+ .apex-service-photo{display:block;width:100%;height:220px;object-fit:cover;grid-column:1/-1;border-radius:9px}
+ .service-cursor-preview{display:none}
+ .service-row{grid-template-columns:70px minmax(0,1fr) 64px;gap:20px;padding:24px}
+ .service-row-icon{width:60px;height:60px}
+ .service-row-title{font-size:1.8rem}
+ .process-card{grid-template-columns:100px minmax(0,1fr);gap:24px}
+ .process-big-num{font-size:5rem}
+ .process-card-left::before{display:none}
+}
+@media(max-width:576px){
+ .service-row{grid-template-columns:44px minmax(0,1fr);gap:16px;padding:18px}
+ .service-row-icon{display:none}
+ .service-row-num{font-size:2.4rem}
+ .service-row-tag{font-size:.65rem;white-space:normal;text-align:center;padding:3px}
+ .service-row-title{font-size:1.65rem}
+ .apex-service-photo{height:180px}
+ .process-pin-wrapper{padding:56px 20px}
+ .process-card{grid-template-columns:1fr;gap:12px;padding:12px 0 28px}
+ .process-card-left{min-height:0;height:auto;display:flex;flex-direction:row;align-items:center;justify-content:space-between}
+ .process-big-num{position:relative;font-size:3.5rem}
+ .process-step-dots{margin-top:0;padding:0}
+ .process-card-title{font-size:2.8rem}
+ .process-main-title{font-size:2.4rem}
+ .process-card-sub{font-size:1rem}
+ .process-section-header{margin-bottom:24px}
+}
+
+@media(min-width:577px) and (max-width:992px){.process-card-left{flex-direction:column;align-items:flex-start;justify-content:flex-start;gap:24px}.process-step-dots{margin-top:0}.process-card{grid-template-rows:auto}}

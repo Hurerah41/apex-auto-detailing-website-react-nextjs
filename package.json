@@ -1,0 +1,10 @@
+{
+  "name": "apex-auto-detailing-launcher",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "npm --prefix ./Apex-Auto-Detailing run dev",
+    "build": "npm --prefix ./Apex-Auto-Detailing run build",
+    "start": "npm --prefix ./Apex-Auto-Detailing run start"
+  }
+}

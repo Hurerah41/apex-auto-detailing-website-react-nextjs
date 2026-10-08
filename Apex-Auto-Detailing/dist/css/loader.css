@@ -1,0 +1,146 @@
+/* WashX — Humorous Progress Loader */
+body.wx-loading { overflow: hidden; }
+
+#wx-loader {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    background: #0a0e1a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.8s cubic-bezier(0.4,0,0.2,1);
+}
+#wx-loader.fading { opacity: 0; pointer-events: none; }
+
+/* ── Content box — constrained width like reference ── */
+.wl-box {
+    width: min(520px, 88vw);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+}
+
+/* Logo */
+.wl-logo {
+    height: 38px;
+    width: auto;
+    filter: brightness(0) invert(1);
+    opacity: 0.88;
+    margin-bottom: 24px;
+}
+
+/* Title — Bebas Neue like requested */
+.wl-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.4rem;
+    font-weight: 400;
+    color: #ffffff;
+    text-align: center;
+    margin: 0 0 8px 0;
+    letter-spacing: 0.04em;
+    line-height: 1.1;
+    min-height: 2.7rem;
+    transition: opacity 0.3s ease;
+}
+
+/* Subtitle */
+.wl-sub {
+    font-family: 'Funnel Sans', sans-serif;
+    font-size: 0.88rem;
+    color: rgba(255,255,255,0.42);
+    text-align: center;
+    margin: 0 0 28px 0;
+    min-height: 1.3rem;
+    transition: opacity 0.3s ease;
+}
+.wl-sub strong { color: rgba(255,255,255,0.75); font-weight: 600; }
+
+/* Progress row */
+.wl-bar-row {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 28px;
+}
+.wl-bar-track {
+    flex: 1;
+    height: 4px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 3px;
+    overflow: hidden;
+}
+.wl-bar-fill {
+    height: 100%;
+    width: 0%;
+    background: #6cc9f4;
+    border-radius: 3px;
+    transition: width 0.4s ease;
+}
+.wl-pct {
+    font-family: 'Funnel Sans', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #6cc9f4;
+    min-width: 36px;
+    text-align: right;
+    letter-spacing: 0.02em;
+}
+
+/* ── Step list ── */
+.wl-steps {
+    width: 100%;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+.wl-step {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-family: 'Funnel Sans', sans-serif;
+    font-size: 0.88rem;
+    transition: opacity 0.3s ease;
+}
+
+/* States */
+.wl-step.pending {
+    opacity: 0.3;
+    color: rgba(255,255,255,0.6);
+}
+.wl-step.active {
+    opacity: 1;
+    color: #ffffff;
+    font-weight: 600;
+}
+.wl-step.done {
+    opacity: 0.55;
+    color: rgba(255,255,255,0.7);
+}
+
+/* Dot indicator */
+.wl-step-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    transition: background 0.3s ease, transform 0.3s ease;
+}
+.wl-step.pending .wl-step-dot { background: rgba(255,255,255,0.18); }
+.wl-step.active  .wl-step-dot {
+    background: #6cc9f4;
+    animation: dotPulse 1.1s ease-in-out infinite;
+}
+.wl-step.done    .wl-step-dot { background: rgba(108,201,244,0.5); }
+
+@keyframes dotPulse {
+    0%,100% { transform: scale(1);   opacity: 1; }
+    50%      { transform: scale(1.5); opacity: 0.6; }
+}
+
+/* Step text */
+.wl-step-text { line-height: 1.4; }
