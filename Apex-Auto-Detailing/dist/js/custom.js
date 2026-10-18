@@ -408,6 +408,28 @@
         if (e.key === 'ArrowRight') next();
     });
 
+    /* ── Auto-slide ── */
+    var autoSlideTimer = null;
+    var isPaused = false;
+    var pauseTimer = null;
+
+    function pauseTemporarily(ms) {
+        isPaused = true;
+        if (pauseTimer) clearTimeout(pauseTimer);
+        pauseTimer = setTimeout(function () { isPaused = false; }, ms || 4000);
+    }
+
+    if (slider) {
+        slider.addEventListener('mouseenter', function () { isPaused = true; });
+        slider.addEventListener('mouseleave', function () { isPaused = false; });
+    }
+
+    autoSlideTimer = setInterval(function () {
+        if (!document.hidden && !isPaused) {
+            next();
+        }
+    }, 3500);
+
     /* ── Init ── */
     applyPositions();
     updateUI();

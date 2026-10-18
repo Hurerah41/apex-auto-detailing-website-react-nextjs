@@ -6,7 +6,15 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { contactConfig } from '../lib/contact-config';
 
 const gallerySlots = ['vs-center', 'vs-left', 'vs-right', 'vs-far-left', 'vs-far-right', 'vs-hidden'];
-const galleryVideos = ['/media/videos/video-1.mp4', '/media/videos/video-2.mp4?ver=2', '/media/videos/video-3.mp4', '/media/videos/video-4.mp4', '/media/videos/video-5.mp4', '/media/videos/video-6.mp4'];
+const galleryItems = [
+  { id: 0, title: '2-Step Paint Correction', src: '/media/gallery/ba-paint-correction.jpg' },
+  { id: 1, title: 'Luxury Interior Deep Clean', src: '/media/gallery/ba-interior-detail.jpg' },
+  { id: 2, title: 'Headlight UV Restoration', src: '/media/gallery/ba-headlight-restoration.jpg' },
+  { id: 3, title: 'Alloy Decontamination', src: '/media/gallery/ba-wheel-detailing.jpg' },
+  { id: 4, title: 'Mud & Grime Decontamination', src: '/media/gallery/ba-foam-wash.jpg' },
+  { id: 5, title: 'PPF Shield & Hydrophobic Gloss', src: '/media/gallery/ba-ceramic-ppf.jpg' }
+];
+const galleryVideos = galleryItems;
 const reviewVideos = ['/media/videos/video-1.mp4', '/media/videos/video-2.mp4', '/media/videos/video-3.mp4'];
 const fallbackMapLink = 'https://www.google.com/maps/search/?api=1&query=Apex%20Auto%20Detailing%20Karachi';
 
@@ -25,6 +33,16 @@ export default function SiteInteractions({ children }) {
   const touchStartRef = useRef(null);
   const [vehicle, setVehicle] = useState('hatchback');
   const [galleryIndex, setGalleryIndex] = useState(0);
+  const isGalleryPausedRef = useRef(false);
+  const galleryPauseTimerRef = useRef(null);
+
+  const pauseGalleryTemporarily = (ms = 4000) => {
+    isGalleryPausedRef.current = true;
+    if (galleryPauseTimerRef.current) clearTimeout(galleryPauseTimerRef.current);
+    galleryPauseTimerRef.current = setTimeout(() => {
+      isGalleryPausedRef.current = false;
+    }, ms);
+  };
 
   useEffect(() => {
     const root = rootRef.current;
@@ -193,6 +211,109 @@ export default function SiteInteractions({ children }) {
           gsap.set(cards, { clearProps: 'transform,zIndex' });
         };
       });
+
+      // ── Scroll Reveal Animations ──────────────────────────────────
+      // Runs on all screen sizes, respects prefers-reduced-motion
+      const revealMedia = gsap.matchMedia();
+      mediaContexts.push(revealMedia);
+      revealMedia.add('(prefers-reduced-motion: no-preference)', () => {
+
+        // Helper: animate elements in stagger, triggered by a parent
+        function revealGroup(elements, triggerEl, opts) {
+          var elArr = Array.from(elements || []);
+          if (!elArr.length) return;
+          var options = opts || {};
+          gsap.fromTo(
+            elArr,
+            { autoAlpha: 0, y: options.y != null ? options.y : 40 },
+            {
+              autoAlpha: 1,
+              y: 0,
+              duration: options.duration || 0.7,
+              ease: options.ease || 'power3.out',
+              stagger: options.stagger != null ? options.stagger : 0.13,
+              clearProps: 'transform,opacity',
+              scrollTrigger: {
+                trigger: triggerEl || elArr[0],
+                start: options.start || 'top 88%',
+                once: true,
+              },
+            },
+          );
+        }
+
+        // ── Section tags + titles ─────────────────────────────────
+        root.querySelectorAll('.wx-tag, .wx-title, .gallery-title, .reviews-big-title').forEach(function(el) {
+          gsap.fromTo(
+            el,
+            { autoAlpha: 0, y: 28 },
+            {
+              autoAlpha: 1, y: 0, duration: 0.65, ease: 'power3.out', clearProps: 'transform,opacity',
+              scrollTrigger: { trigger: el, start: 'top 90%', once: true },
+            },
+          );
+        });
+
+        // ── Subtitle / body text ──────────────────────────────────
+        root.querySelectorAll('.gallery-main-sub, .process-main-sub, .about-lead, .about-body, .about-desc, .section-sub, .packages-footnote').forEach(function(el) {
+          gsap.fromTo(
+            el,
+            { autoAlpha: 0, y: 20 },
+            {
+              autoAlpha: 1, y: 0, duration: 0.6, ease: 'power2.out', clearProps: 'transform,opacity',
+              scrollTrigger: { trigger: el, start: 'top 91%', once: true },
+            },
+          );
+        });
+
+        // ── About section ─────────────────────────────────────────
+        var about = root.querySelector('#about');
+        if (about) {
+          revealGroup(about.querySelectorAll('.about-img, .about-img-wrap, .about-media'), about, { stagger: 0.15, y: 55 });
+          revealGroup(about.querySelectorAll('.about-stat'), about.querySelector('.about-stats') || about, { stagger: 0.1, y: 30 });
+          revealGroup(about.querySelectorAll('.about-cta, .btn'), about, { stagger: 0.1, y: 20 });
+        }
+
+        // ── Services rows ──────────────────────────────────────────
+        var services = root.querySelector('#services');
+        if (services) {
+          revealGroup(services.querySelectorAll('.service-row'), services, { stagger: 0.1, y: 36 });
+        }
+
+        // ── Package cards ──────────────────────────────────────────
+        var packages = root.querySelector('#packages');
+        if (packages) {
+          revealGroup(packages.querySelectorAll('.pkg-card'), packages, { stagger: 0.12, y: 44 });
+        }
+
+        // ── Gallery section header ─────────────────────────────────
+        var gallery = root.querySelector('#gallery');
+        if (gallery) {
+          revealGroup(gallery.querySelectorAll('.gallery-header > *'), gallery, { stagger: 0.12, y: 28 });
+        }
+
+        // ── Contact section ────────────────────────────────────────
+        var contact = root.querySelector('#contact');
+        if (contact) {
+          revealGroup(
+            contact.querySelectorAll('.contact-title, .contact-sub, .contact-info-item, .contact-form-group, .contact-form-actions'),
+            contact,
+            { stagger: 0.09, y: 30 }
+          );
+        }
+
+        // ── Footer ────────────────────────────────────────────────
+        var footer = root.querySelector('footer');
+        if (footer) {
+          revealGroup(
+            footer.querySelectorAll('.footer-logo, .footer-col, .footer-nav, .footer-socials, .footer-bottom'),
+            footer,
+            { stagger: 0.09, y: 22, start: 'top 96%' }
+          );
+        }
+
+      });
+      // ── End Scroll Reveal ─────────────────────────────────────────
     }, root);
 
     const onLoad = () => ScrollTrigger.refresh();
@@ -245,6 +366,28 @@ export default function SiteInteractions({ children }) {
     if (fill) fill.style.width = `${((galleryIndex + 1) / cards.length) * 100}%`;
     return () => current?.querySelector('video')?.pause();
   }, [galleryIndex]);
+
+  useEffect(() => {
+    const root = rootRef.current;
+    if (!root) return;
+    const vslider = root.querySelector('#vslider');
+    const onMouseEnter = () => { isGalleryPausedRef.current = true; };
+    const onMouseLeave = () => { isGalleryPausedRef.current = false; };
+    vslider?.addEventListener('mouseenter', onMouseEnter);
+    vslider?.addEventListener('mouseleave', onMouseLeave);
+
+    const interval = setInterval(() => {
+      if (document.hidden || isGalleryPausedRef.current) return;
+      setGalleryIndex((prev) => (prev + 1) % galleryItems.length);
+    }, 3500);
+
+    return () => {
+      clearInterval(interval);
+      if (galleryPauseTimerRef.current) clearTimeout(galleryPauseTimerRef.current);
+      vslider?.removeEventListener('mouseenter', onMouseEnter);
+      vslider?.removeEventListener('mouseleave', onMouseLeave);
+    };
+  }, []);
 
   function closeMobileNav() {
     const root = rootRef.current;
@@ -308,16 +451,24 @@ export default function SiteInteractions({ children }) {
     }
 
     if (target.closest('#vslider-prev')) {
-      setGalleryIndex((index) => (index + galleryVideos.length - 1) % galleryVideos.length);
+      pauseGalleryTemporarily(4000);
+      setGalleryIndex((index) => (index + galleryItems.length - 1) % galleryItems.length);
       return;
     }
     if (target.closest('#vslider-next')) {
-      setGalleryIndex((index) => (index + 1) % galleryVideos.length);
+      pauseGalleryTemporarily(4000);
+      setGalleryIndex((index) => (index + 1) % galleryItems.length);
       return;
     }
     const galleryCard = target.closest('.vslider-card');
-    if (galleryCard?.classList.contains('vs-left')) setGalleryIndex((index) => (index + galleryVideos.length - 1) % galleryVideos.length);
-    if (galleryCard?.classList.contains('vs-right')) setGalleryIndex((index) => (index + 1) % galleryVideos.length);
+    if (galleryCard?.classList.contains('vs-left')) {
+      pauseGalleryTemporarily(4000);
+      setGalleryIndex((index) => (index + galleryItems.length - 1) % galleryItems.length);
+    }
+    if (galleryCard?.classList.contains('vs-right')) {
+      pauseGalleryTemporarily(4000);
+      setGalleryIndex((index) => (index + 1) % galleryItems.length);
+    }
 
     if (target.closest('#apex-gallery-button')) {
       root.querySelector('#gallery')?.scrollIntoView({ behavior: 'smooth' });
@@ -430,7 +581,10 @@ export default function SiteInteractions({ children }) {
     const touch = event.changedTouches[0];
     const dx = touch.screenX - start.x;
     const dy = touch.screenY - start.y;
-    if (start.gallery && Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 36) setGalleryIndex((index) => (index + (dx < 0 ? 1 : galleryVideos.length - 1)) % galleryVideos.length);
+    if (start.gallery && Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 36) {
+      pauseGalleryTemporarily(4000);
+      setGalleryIndex((index) => (index + (dx < 0 ? 1 : galleryItems.length - 1)) % galleryItems.length);
+    }
     const modal = rootRef.current?.querySelector('#review-video-modal.active');
     if (start.review && modal && Math.abs(dx) > 40) changeReview(rootRef.current, dx < 0 ? 1 : -1);
     touchStartRef.current = null;
@@ -443,8 +597,14 @@ export default function SiteInteractions({ children }) {
       if (modal && event.key === 'Escape') closeReviewModal(root);
       else if (modal && event.key === 'ArrowLeft') changeReview(root, -1);
       else if (modal && event.key === 'ArrowRight') changeReview(root, 1);
-      else if (event.key === 'ArrowLeft') setGalleryIndex((index) => (index + galleryVideos.length - 1) % galleryVideos.length);
-      else if (event.key === 'ArrowRight') setGalleryIndex((index) => (index + 1) % galleryVideos.length);
+      else if (event.key === 'ArrowLeft') {
+        pauseGalleryTemporarily(4000);
+        setGalleryIndex((index) => (index + galleryItems.length - 1) % galleryItems.length);
+      }
+      else if (event.key === 'ArrowRight') {
+        pauseGalleryTemporarily(4000);
+        setGalleryIndex((index) => (index + 1) % galleryItems.length);
+      }
     };
     document.addEventListener('keydown', onKeyDown);
     return () => document.removeEventListener('keydown', onKeyDown);
